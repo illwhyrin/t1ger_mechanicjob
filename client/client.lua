@@ -670,7 +670,6 @@ end
 					 "t1ger_mechanicjob:checkAccess",
 					 function(hasAccess)
 						 if hasAccess then
-							 --TriggerEvent('inventory:stash', 'Mechanic Stash ' .. k,v)
 							 storageMenu = v
 							 MechShopStorageMenu(k, v)
 						 else
@@ -687,121 +686,124 @@ end
  -- Storage Menu:
 function MechShopStorageMenu(id, val)
 
-	local keyPressed = false
-	 invItems = {}
-	local elements   = {
-		{ label = Lang["storage_deposit"], value = "storage_deposit" },
-		{ label = Lang['storage_withdraw'], value = "storage_withdraw" },
-	}
-	local assert     = assert
-	local menu       = assert(MenuV)
-	local Inventory  = MenuV:CreateMenu("Storage", "", 'size-150')
-	local Inventory1 = MenuV:CreateMenu("Inventory", "", 'size-150')
-	local Inventory2 = MenuV:CreateMenu(Lang['storage_withdraw'], "", 'size-150')
-	MenuV:OpenMenu(Inventory, function()
-	end)
-	for k, v in ipairs(elements) do
-		
-		local mechmenubutton = Inventory:AddButton({ icon = "🧑‍🔧 	", label = v.label, value = v, description = v.label, select = function(btn)
-			local value = btn.Value.value
-			if value == "storage_deposit" then
-				MenuV:OpenMenu(Inventory1, function()
-				end)
-				MenuV:Refresh()
-			elseif value == "storage_withdraw" then
-				MenuV:OpenMenu(Inventory2, function()
-				end)
-			end
-		end })
-		FXCore.Functions.TriggerCallback('t1ger_mechanicjob:getUserInventory', function(inventory)
-			MenuV:Refresh()
-			for k, v in pairs(inventory) do
-				if v.amount > 0 then
-					table.insert(invItems, { label = v.amount .. "x " .. v.label, value = v.name })
-				end
-			end
-			for k, v in pairs(invItems) do
-				
-				local buybutton = Inventory1:AddButton({ icon = "🧑‍🔧 	", label = v.label, value = v, description = v.label, select = function(btn)
-					
+	TriggerServerEvent("inventory:server:OpenInventory", "stash", "Mechanic "..id,{
+		maxweight = 4000000,
+		slots = 10,
+	})
+	TriggerEvent("inventory:client:SetCurrentStash", "Mechanic "..id)
 
-					local data = btn.Value.value
-					local count = LocalInputInt("wachin", 10, 1)
-					if count == nil then
-						ShowNotifyESX(Lang['invalid_amount'])
-						MenuV:Refresh()
-					else
-						if count > 0 then
-
-							if not keyPressed then
-								keyPressed = true
-								TriggerServerEvent('t1ger_mechanicjob:depositItem', data, tonumber(count), id)
-								Inventory1:Close()
-								MenuV:Refresh()
-							end
-
-							Inventory1:Close()
-							MenuV:Refresh()
-						else
-							ShowNotifyESX(Lang['invalid_amount'])
-							Inventory1:Close()
-							MenuV:Refresh()
-						end
-					end
-				end})
-			end
-			MenuV:Refresh()
-		end)
-
-
-
-
-		FXCore.Functions.TriggerCallback('t1ger_mechanicjob:getStorageInventory', function(inventory)
-			if inventory ~= nil then 
-				local invItems1 = {}
-				for k,v in pairs(inventory) do
-					table.insert(invItems1, {label = v.count.."x "..v.label, value = v.item, amount = v.count})
-				end
-				for k, v in pairs(invItems1) do
-				
-					local buybutton = Inventory2:AddButton({ icon = "🧑‍🔧 	", label = v.label, value = v, description = v.label, select  = function(btn)
-
-						local data = btn.Value
-						print(data.value)
-						local count = LocalInputInt("storage",3,1)
-
-						if count == nil then
-							ShowNotifyESX(Lang['invalid_amount'])
-						else
-							if count > 0 then
-								if count <= data.amount then
-									if not keyPressed then 
-										keyPressed = true
-										TriggerServerEvent('t1ger_mechanicjob:withdrawItem', data.value, count, id)
-									end
-								else
-									ShowNotifyESX(Lang['too_high_count'])
-								end
-								Wait(500)
-								MechShopStorageMenu(id, val)
-							else
-								ShowNotifyESX(Lang['invalid_amount'])
-							end
-						end
-						MenuV:Refresh()
-						Inventory2:Close()
-					end})
-					MenuV:Refresh()
-				end
-				Inventory1:Close()
-				
-				
-			else
-				ShowNotifyESX(Lang['storage_inv_empty'])
-			end
-		end, id)
-
-	end
+	--local keyPressed = false
+	-- invItems = {}
+	--local elements   = {
+	--	{ label = Lang["storage_deposit"], value = "storage_deposit" },
+	--	--{ label = Lang['storage_withdraw'], value = "storage_withdraw" },
+	--}
+	--local assert     = assert
+	--local menu       = assert(MenuV)
+	--local Inventory  = MenuV:CreateMenu("Storage", "", 'size-150')
+	--local Inventory1 = MenuV:CreateMenu("Inventory", "", 'size-150')
+	--local Inventory2 = MenuV:CreateMenu(Lang['storage_withdraw'], "", 'size-150')
+	--MenuV:OpenMenu(Inventory, function()
+	--end)
+	--for k, v in ipairs(elements) do
+	--
+	--	local mechmenubutton = Inventory:AddButton({ icon = "🧑‍🔧 	", label = v.label, value = v, description = v.label, select = function(btn)
+	--		local value = btn.Value.value
+	--		if value == "storage_deposit" then
+	--
+	--
+	--
+	--		end
+	--	end })
+	--	FXCore.Functions.TriggerCallback('t1ger_mechanicjob:getUserInventory', function(inventory)
+	--		MenuV:Refresh()
+	--		for k, v in pairs(inventory) do
+	--			if v.amount > 0 then
+	--				table.insert(invItems, { label = v.amount .. "x " .. v.label, value = v.name })
+	--			end
+	--		end
+	--		for k, v in pairs(invItems) do
+	--
+	--			local buybutton = Inventory1:AddButton({ icon = "🧑‍🔧 	", label = v.label, value = v, description = v.label, select = function(btn)
+	--
+	--
+	--				local data = btn.Value.value
+	--				local count = LocalInputInt("wachin", 10, 1)
+	--				if count == nil then
+	--					ShowNotifyESX(Lang['invalid_amount'])
+	--					MenuV:Refresh()
+	--				else
+	--					if count > 0 then
+	--
+	--						if not keyPressed then
+	--							keyPressed = true
+	--							TriggerServerEvent('t1ger_mechanicjob:depositItem', data, tonumber(count), id)
+	--							Inventory1:Close()
+	--							MenuV:Refresh()
+	--						end
+	--
+	--						Inventory1:Close()
+	--						MenuV:Refresh()
+	--					else
+	--						ShowNotifyESX(Lang['invalid_amount'])
+	--						Inventory1:Close()
+	--						MenuV:Refresh()
+	--					end
+	--				end
+	--			end})
+	--		end
+	--		MenuV:Refresh()
+	--	end)
+	--
+	--
+	--
+	--
+	--	FXCore.Functions.TriggerCallback('t1ger_mechanicjob:getStorageInventory', function(inventory)
+	--		if inventory ~= nil then
+	--			local invItems1 = {}
+	--			for k,v in pairs(inventory) do
+	--				table.insert(invItems1, {label = v.count.."x "..v.label, value = v.item, amount = v.count})
+	--			end
+	--			for k, v in pairs(invItems1) do
+	--
+	--				local buybutton = Inventory2:AddButton({ icon = "🧑‍🔧 	", label = v.label, value = v, description = v.label, select  = function(btn)
+	--
+	--					local data = btn.Value
+	--					print(data.value)
+	--					local count = LocalInputInt("storage",3,1)
+	--
+	--					if count == nil then
+	--						ShowNotifyESX(Lang['invalid_amount'])
+	--					else
+	--						if count > 0 then
+	--							if count <= data.amount then
+	--								if not keyPressed then
+	--									keyPressed = true
+	--									TriggerServerEvent('t1ger_mechanicjob:withdrawItem', data.value, count, id)
+	--								end
+	--							else
+	--								ShowNotifyESX(Lang['too_high_count'])
+	--							end
+	--							Wait(500)
+	--							MechShopStorageMenu(id, val)
+	--						else
+	--							ShowNotifyESX(Lang['invalid_amount'])
+	--						end
+	--					end
+	--					MenuV:Refresh()
+	--					Inventory2:Close()
+	--				end})
+	--				MenuV:Refresh()
+	--			end
+	--			Inventory1:Close()
+	--
+	--
+	--		else
+	--			ShowNotifyESX(Lang['storage_inv_empty'])
+	--		end
+	--	end, id)
+	--
+	--end
 
 end
  -- ## STORAGE MENU END ## --
