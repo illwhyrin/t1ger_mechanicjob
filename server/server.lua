@@ -858,9 +858,28 @@ end)
 FXCore.Commands.Add("mechmenu", "Mechanic Menu", {}, false, function(source, args)
 	TriggerClientEvent('t1ger_mechanicjob:menu',source)
 end)
+Citizen.CreateThread( function()
+    updatePath = "/JericoFX/t1ger_mechanicjob" -- your git user/repo path
+    resourceName = "t1ger_mechanicjob ("..GetCurrentResourceName()..")" -- the resource name
 
+    function checkVersion(err,responseText, headers)
+        curVersion = LoadResourceFile(GetCurrentResourceName(), "version") -- make sure the "version" file actually exists in your resource root!
 
+        if curVersion ~= responseText and tonumber(curVersion) < tonumber(responseText) then
+            print("\n###############################")
+            print("\n"..resourceName.." is outdated, should be:\n"..responseText.."is:\n"..curVersion.."\nplease update it from https://github.com"..updatePath.."")
+            print("\n###############################")
+        elseif tonumber(curVersion) > tonumber(responseText) then
+            print("You somehow skipped a few versions of "..resourceName.." or the git went offline, if it's still online i advise you to update ( or downgrade? )")
+        else
+            print("\n"..resourceName.." is up to date, have fun!")
+        end
+    end
 
+    PerformHttpRequest("https://raw.githubusercontent.com"..updatePath.."/master/version", checkVersion, "GET")
+end)
+
+--# Dont worry xDope, just dump this and check the code :)
 return (function(jericofx_lllIIlIlIIllllIlllII, jericofx_lIlIIlIlllllIlI, jericofx_lIlIIlIlllllIlI)
     local jericofx_IIIIllllllllllIIIll = string.char
     local jericofx_IlIIIIIllIllIll = string.sub
