@@ -1,29 +1,29 @@
 PlayerData 	= {}
 
-RSCore = nil
+FXCore = nil
 Citizen.CreateThread(function() 
-    while RSCore == nil do
-        TriggerEvent("RSCore:GetObject", function(obj) RSCore = obj end)
+    while FXCore == nil do
+        TriggerEvent("FXCore:GetObject", function(obj) FXCore = obj end)
         Citizen.Wait(200)
     end
 end)
 
 
-RegisterNetEvent('RSCore:Client:OnPlayerLoaded')
-AddEventHandler('RSCore:Client:OnPlayerLoaded', function()
-	PlayerData = RSCore.Functions.GetPlayerData()
+RegisterNetEvent('FXCore:Client:OnPlayerLoaded')
+AddEventHandler('FXCore:Client:OnPlayerLoaded', function()
+	PlayerData = FXCore.Functions.GetPlayerData()
 end)
 
-RegisterNetEvent('RSCore:Client:OnJobUpdate')
-AddEventHandler('RSCore:Client:OnJobUpdate', function(job)
+RegisterNetEvent('FXCore:Client:OnJobUpdate')
+AddEventHandler('FXCore:Client:OnJobUpdate', function(job)
 	PlayerData.job = job
 end)
 
 -- [[ ESX SHOW ADVANCED NOTIFICATION ]] --
 RegisterNetEvent('t1ger_mechanicjob:ShowAdvancedNotifyESX')
 AddEventHandler('t1ger_mechanicjob:ShowAdvancedNotifyESX', function(title, subject, msg, icon, iconType)
-	RSCore.Functions.Notify(msg, "error")
-	-- If you want to switch RSCore.Functions.Notify with something else:
+	FXCore.Functions.Notify(msg, "error")
+	-- If you want to switch FXCore.Functions.Notify with something else:
 	-- 1) Comment out the function
 	-- 2) add your own
 	
@@ -36,8 +36,8 @@ AddEventHandler('t1ger_mechanicjob:ShowNotifyESX', function(msg)
 end)
 
 function ShowNotifyESX(msg)
-	RSCore.Functions.Notify(msg)
-	-- If you want to switch RSCore.Functions.Notify with something else:
+	FXCore.Functions.Notify(msg)
+	-- If you want to switch FXCore.Functions.Notify with something else:
 	-- 1) Comment out the function
 	-- 2) add your own
 end

@@ -12,7 +12,7 @@
  ]]
 
  
- RSCore = nil
+ FXCore = nil
  player = nil
  coords = {}
  curVehicle = nil
@@ -21,8 +21,8 @@
  playerloaded = false
  Citizen.CreateThread(
 	 function()
-		 while RSCore == nil do
-			 TriggerEvent("RSCore:GetObject",function(obj)RSCore = obj
+		 while FXCore == nil do
+			 TriggerEvent("FXCore:GetObject",function(obj)FXCore = obj
 				 end)
 			 Citizen.Wait(400)
 		 end
@@ -41,15 +41,15 @@
  emptyShops = {}
 
 
-RegisterNetEvent('RSCore:Client:OnPlayerLoaded')
-AddEventHandler('RSCore:Client:OnPlayerLoaded', function()
+RegisterNetEvent('FXCore:Client:OnPlayerLoaded')
+AddEventHandler('FXCore:Client:OnPlayerLoaded', function()
 	playerloaded = true
-	PlayerJob = RSCore.Functions.GetPlayerData().job
+	PlayerJob = FXCore.Functions.GetPlayerData().job
 	
 end)
 
-RegisterNetEvent('RSCore:Client:OnJobUpdate')
-AddEventHandler('RSCore:Client:OnJobUpdate', function(JobInfo)
+RegisterNetEvent('FXCore:Client:OnJobUpdate')
+AddEventHandler('FXCore:Client:OnJobUpdate', function(JobInfo)
 	PlayerJob = JobInfo
 end)
 
@@ -60,8 +60,8 @@ AddEventHandler("t1ger_mechanicjob:getPlayerIden", function()
 end)
 Citizen.CreateThread(function()
 	Wait(500)
-	if RSCore.Functions.GetPlayerData() ~= nil then
-		PlayerJob = RSCore.Functions.GetPlayerData().job
+	if FXCore.Functions.GetPlayerData() ~= nil then
+		PlayerJob = FXCore.Functions.GetPlayerData().job
 		onDuty = true
 	end
 end)
@@ -95,8 +95,8 @@ Citizen.CreateThread(function()
 	end
 end)
 
-RegisterNetEvent('RSCore:Client:SetDuty')
-AddEventHandler('RSCore:Client:SetDuty', function(duty)
+RegisterNetEvent('FXCore:Client:SetDuty')
+AddEventHandler('FXCore:Client:SetDuty', function(duty)
 	onDuty = duty
 end)
 
@@ -106,7 +106,7 @@ end)
 		 for k, v in pairs(shopBlips) do
 			 RemoveBlip(v)
 		 end
-		 RSCore.Functions.TriggerCallback("t1ger_mechanicjob:getTakenShops",function(ownedShops)
+		 FXCore.Functions.TriggerCallback("t1ger_mechanicjob:getTakenShops",function(ownedShops)
 			 for k, v in pairs(ownedShops) do
 					 if v.shopID ~= plyShopID then
 						print(v.shopID)
@@ -185,17 +185,17 @@ end)
 
 		 elseif distToBoss <= 2.0 then
 			 if plyShopID == k then
-				 RSCore.Functions.DrawText3D(v.menuPos[1], v.menuPos[2], v.menuPos[3], Lang["mech_shop_manage"])
+				 FXCore.Functions.DrawText3D(v.menuPos[1], v.menuPos[2], v.menuPos[3], Lang["mech_shop_manage"])
 				 if IsControlJustPressed(0, Config.KeyToManageShop) then
 					 bossMenu = v
 					 MechShopManageMenu(k, v)
 				 end
 			 else
 				 if emptyShops[k] == k then
-					 RSCore.Functions.DrawText3D(v.menuPos[1], v.menuPos[2], v.menuPos[3], Lang["no_access_to_shop"])
+					 FXCore.Functions.DrawText3D(v.menuPos[1], v.menuPos[2], v.menuPos[3], Lang["no_access_to_shop"])
 				 else
 					 if plyShopID == 0 then
-						 RSCore.Functions.DrawText3D(
+						 FXCore.Functions.DrawText3D(
 							 v.menuPos[1],
 							 v.menuPos[2],
 							 v.menuPos[3],
@@ -206,7 +206,7 @@ end)
 							 BuyMechShopMenu(k, v)
 						 end
 					 else
-						 RSCore.Functions.DrawText3D(v.menuPos[1], v.menuPos[2], v.menuPos[3], Lang["only_one_mech_shop"])
+						 FXCore.Functions.DrawText3D(v.menuPos[1], v.menuPos[2], v.menuPos[3], Lang["only_one_mech_shop"])
 					 end
 				 end
 			 end
@@ -252,9 +252,9 @@ function MechShopManageMenu(id, val)
 			local shopName = LocalInput("ShopName", 20, "New Name")
 			if shopName == "New Name" then
 
-				RSCore.Functions.Notify("Cannot Use that name")
+				FXCore.Functions.Notify("Cannot Use that name")
 			else
-				RSCore.Functions.TriggerCallback("t1ger_mechanicjob:renameMechShop",
+				FXCore.Functions.TriggerCallback("t1ger_mechanicjob:renameMechShop",
 					function(renamed)
 						if renamed then
 							ShowNotifyESX((Lang["mech_shop_renamed"]):format(shopName))
@@ -334,7 +334,7 @@ end
 	 local MenuV = assert(MenuV)
 
 
-	 RSCore.Functions.TriggerCallback("t1ger_mechanicjob:getShopAccounts",
+	 FXCore.Functions.TriggerCallback("t1ger_mechanicjob:getShopAccounts",
 		 function(account)
 			 jerico = account
 			
@@ -349,7 +349,7 @@ end
 	 local button2 = AccountMain:AddButton({ icon = "🧑‍🔧 	", label = "Ammount Details", value = 3 })
 
 	 button2:On("select", function()
-		 RSCore.Functions.Notify("You Have in your account $" .. jerico)
+		 FXCore.Functions.Notify("You Have in your account $" .. jerico)
 	
 		 MenuV:Refresh()
 		 MenuV:CloseMenu(AccountMain)
@@ -368,7 +368,7 @@ end
 			 MenuV:CloseMenu(AccountMain)
 			 MenuV:Refresh()
 			-- WarMenu.CloseMenu()
-			 RSCore.Functions.Notify("The Value is Invalid")
+			 FXCore.Functions.Notify("The Value is Invalid")
 		 end
 	 end)
 	 button1:On("select", function()
@@ -383,7 +383,7 @@ end
 			 MenuV:CloseMenu(Manage)
 			 MenuV:Refresh()
 			-- WarMenu.CloseMenu()
-			 RSCore.Functions.Notify("The Value is Invalid")
+			 FXCore.Functions.Notify("The Value is Invalid")
 		 end
 
 
@@ -413,7 +413,7 @@ end
 	 botonvalue = nil
 	 
 -- GET ONLINE PLAYERS AND DISPLAY
-	 RSCore.Functions.TriggerCallback('t1ger_mechanicjob:getOnlinePlayers', function(players)
+	 FXCore.Functions.TriggerCallback('t1ger_mechanicjob:getOnlinePlayers', function(players)
 		 local elements = {}
 		 for i = 1, #players, 1 do
 			 table.insert(elements, {
@@ -429,7 +429,7 @@ end
 				 botonvalue = btn
 				 buybutton2:On("confirm", function()
 					local jobGrade = 0
-					TriggerServerEvent('t1ger_mechanicjob:reqruitEmployee', id, RSCore.Functions.GetPlayerData(botonvalue.Value.identifier).steam, botonvalue.Value.name)
+					TriggerServerEvent('t1ger_mechanicjob:reqruitEmployee', id, FXCore.Functions.GetPlayerData(botonvalue.Value.identifier).steam, botonvalue.Value.name)
 					MenuV:CloseMenu(Manage1)
 				end)
 				buybutton2:On("deny", function()
@@ -460,7 +460,7 @@ end
 	 end)
 	-- local confirm = Manage:AddConfirm({ icon = '🔥', label = 'Fire Employee?', value = false })
 
-	 RSCore.Functions.TriggerCallback("t1ger_mechanicjob:getEmployees", function(employees)
+	 FXCore.Functions.TriggerCallback("t1ger_mechanicjob:getEmployees", function(employees)
 		if employees ~= nil then
 		 for k, v in ipairs(employees) do
 				button3 = Manage:AddButton({ icon = "🧑‍🔧	", label = v.firstname.." "..v.lastname.." | "..v.jobGrade, value = v, select = function(btn)
@@ -542,7 +542,7 @@ end
 	local buybutton2 = ShellMenu:AddConfirm({ icon = '🔥', label = 'Confirm', value = 'no' })
 	buybutton2:On("confirm",function()
 	
-		RSCore.Functions.TriggerCallback("t1ger_mechanicjob:sellMechShop",function(sold)
+		FXCore.Functions.TriggerCallback("t1ger_mechanicjob:sellMechShop",function(sold)
 			if sold then
 				TriggerServerEvent("t1ger_mechanicjob:fetchMechShops")
 				ShowNotifyESX((Lang["mech_shop_sold"]):format(math.floor(sellPrice)))
@@ -585,7 +585,7 @@ end
 	buybutton:On('select', function()
 
 		local shopName = LocalInput("buy", 20, "Shop Name")
-		RSCore.Functions.TriggerCallback("t1ger_mechanicjob:buyMechShop",function(purchased)
+		FXCore.Functions.TriggerCallback("t1ger_mechanicjob:buyMechShop",function(purchased)
 		--	print("792")
 			 if purchased then
 				 ShowNotifyESX((Lang["mech_shop_bought"]):format(math.floor(val.price)))
@@ -664,9 +664,9 @@ end
 				 )
 			 end
 		 elseif distToStorage <= 2.0 then
-			 RSCore.Functions.DrawText3D(v.storage[1], v.storage[2], v.storage[3], Lang["press_to_storage"])
+			 FXCore.Functions.DrawText3D(v.storage[1], v.storage[2], v.storage[3], Lang["press_to_storage"])
 			 if IsControlJustPressed(0, 38) then
-				 RSCore.Functions.TriggerCallback(
+				 FXCore.Functions.TriggerCallback(
 					 "t1ger_mechanicjob:checkAccess",
 					 function(hasAccess)
 						 if hasAccess then
@@ -713,7 +713,7 @@ function MechShopStorageMenu(id, val)
 				end)
 			end
 		end })
-		RSCore.Functions.TriggerCallback('t1ger_mechanicjob:getUserInventory', function(inventory)
+		FXCore.Functions.TriggerCallback('t1ger_mechanicjob:getUserInventory', function(inventory)
 			MenuV:Refresh()
 			for k, v in pairs(inventory) do
 				if v.amount > 0 then
@@ -756,7 +756,7 @@ function MechShopStorageMenu(id, val)
 
 
 
-		RSCore.Functions.TriggerCallback('t1ger_mechanicjob:getStorageInventory', function(inventory)
+		FXCore.Functions.TriggerCallback('t1ger_mechanicjob:getStorageInventory', function(inventory)
 			if inventory ~= nil then 
 				local invItems1 = {}
 				for k,v in pairs(inventory) do
@@ -858,9 +858,9 @@ end
 				 )
 			 end
 		 elseif distToWorkbench < 2.0 then
-			 RSCore.Functions.DrawText3D(v.workbench[1], v.workbench[2], v.workbench[3], Lang["press_to_workbench"])
+			 FXCore.Functions.DrawText3D(v.workbench[1], v.workbench[2], v.workbench[3], Lang["press_to_workbench"])
 			 if IsControlJustPressed(0, 38) then
-				 RSCore.Functions.TriggerCallback(
+				 FXCore.Functions.TriggerCallback(
 					 "t1ger_mechanicjob:checkAccess",
 					 function(hasAccess)
 						 if hasAccess then
@@ -914,7 +914,7 @@ local elements = {}
 						print("true")
 					if not keyPressed then 
 						keyPressed = true
-						RSCore.Functions.Progressbar("sell_pawn_items", (Lang['crafting_item']:format(string.upper(select.label))), (Config.CraftTime * 1000), false, true, {}, {}, {}, {}, function() -- Done
+						FXCore.Functions.Progressbar("sell_pawn_items", (Lang['crafting_item']:format(string.upper(select.label))), (Config.CraftTime * 1000), false, true, {}, {}, {}, {}, function() -- Done
 
 						end, function() -- Cancel
 
@@ -1022,7 +1022,7 @@ local elements = {}
 								 end
 								 if liftDist < 2.0 then
 									 if not v.inUse then
-										 RSCore.Functions.DrawText3D(v.entry[1], v.entry[2], v.entry[3], Lang["park_on_lift"])
+										 FXCore.Functions.DrawText3D(v.entry[1], v.entry[2], v.entry[3], Lang["park_on_lift"])
 										 if IsControlJustPressed(0, 38) then
 											 local plate = GetVehicleNumberPlateText(curVehicle):gsub("^%s*(.-)%s*$", "%1")
 											 v.currentVeh = curVehicle
@@ -1051,7 +1051,7 @@ local elements = {}
 										 break
 										 end
 									 else
-										 RSCore.Functions.DrawText3D(v.entry[1], v.entry[2], v.entry[3], Lang["lift_occupied"])
+										 FXCore.Functions.DrawText3D(v.entry[1], v.entry[2], v.entry[3], Lang["lift_occupied"])
 									 end
 								 end
 							 end
@@ -1095,14 +1095,14 @@ local elements = {}
 								 end
 								 if controlDist < 1.5 then
 									 if v.inUse then
-										 RSCore.Functions.DrawText3D(v.control[1],v.control[2],v.control[3],Lang["remove_or_move_veh"])
+										 FXCore.Functions.DrawText3D(v.control[1],v.control[2],v.control[3],Lang["remove_or_move_veh"])
 										 if IsControlJustPressed(0, 47) then
 											 Citizen.Wait(1000)
 											 FreezeEntityPosition(v.currentVeh, false)
 											 SetEntityCoords(v.currentVeh,v.entry[1],v.entry[2],v.entry[3],1,0,0,1)
 											 local plate = GetVehicleNumberPlateText(v.currentVeh):gsub("^%s*(.-)%s*$", "%1")
 											 if plate == nil then
-												 RSCore.Functions.Notify("Plate number must not be null")
+												 FXCore.Functions.Notify("Plate number must not be null")
 											 end
 											 vehOnLift[plate] = nil
 											 v.currentVeh = nil
@@ -1127,7 +1127,7 @@ local elements = {}
 											 end
 										 end
 									 else
-										 RSCore.Functions.DrawText3D(v.control[1], v.control[2], v.control[3], Lang["no_veh_to_control"])
+										 FXCore.Functions.DrawText3D(v.control[1], v.control[2], v.control[3], Lang["no_veh_to_control"])
 									 end
 								 end
 							 end
@@ -1147,7 +1147,7 @@ local elements = {}
 end)
 
  function GetClosestPlayer()
-	 local closestPlayers = RSCore.Functions.GetPlayersFromCoords()
+	 local closestPlayers = FXCore.Functions.GetPlayersFromCoords()
 	 local closestDistance = -1
 	 local closestPlayer = -1
 	 local coords = GetEntityCoords(GetPlayerPed(-1))
@@ -1169,7 +1169,7 @@ end)
  
  -- Mechanic Action Menu:
  function OpenMechanicActionMenu()
-	 if RSCore.Functions.GetPlayerData().job.name == "mechanic" then
+	 if FXCore.Functions.GetPlayerData().job.name == "mechanic" then
 		 local elements = {
 			 {label = "Billing", value = 1},
 			 {label = "Use Car Jack", value = 2},
@@ -1202,26 +1202,19 @@ end)
 					 else
 						 ShowNotifyESX(Lang['invalid_amount'])
 					 end
-					-- MenuV:CloseMenu(MechMenu)
 				 elseif value == 2 then
 					 CarJackFunction('interact')
-					-- MenuV:CloseMenu(MechMenu1)
 				 elseif value == 3 then
 					 InspectVehicleFunction()
 				 elseif value == 4 then
 					 RepairVehicleHealthPart()
-					-- MenuV:CloseMenu(MechMenu1)
 				 elseif value == 5 then
 					 RepairVehicleEngine()
-					-- MenuV:CloseMenu(MechMenu1)
 				 elseif value == 6 then
-
 					 CarJackFunction('analyse')
-					-- MenuV:CloseMenu(MechMenu1)
 				 elseif value == 7 then
 					 ManageNpcJobs()
-					--[[ elseif value == 8 then
-						CarryObjectsMainMenu() ]]
+
 				 end
 
 
@@ -1389,14 +1382,14 @@ end)
 					 Citizen.Wait(1)
 					 distance = (GetDistanceBetweenCoords(coords, vector3(enginePos.x, enginePos.y, enginePos.z), true))
 					 if distance < 5.0 then
-						 RSCore.Functions.DrawText3D(enginePos.x, enginePos.y, enginePos.z, Lang["repair_engine"])
+						 FXCore.Functions.DrawText3D(enginePos.x, enginePos.y, enginePos.z, Lang["repair_engine"])
 						 if IsControlJustPressed(0, 38) and distance < 1.0 then
 							 -- inspect anim:
 							 TaskTurnPedToFaceEntity(player, vehicle, 1.0)
 							 Citizen.Wait(1000)
 							 TaskStartScenarioInPlace(player, "WORLD_HUMAN_CLIPBOARD", 0, true)
 							-- exports["progressBars"]:startUI(2000, "INSPECTING: ENGINE")
-							 RSCore.Functions.Progressbar("sell_pawn_items", "INSPECTING: ENGINE", 2000, false, true, {}, {}, {}, {}, function() -- Done
+							 FXCore.Functions.Progressbar("sell_pawn_items", "INSPECTING: ENGINE", 2000, false, true, {}, {}, {}, {}, function() -- Done
 
 							 end, function() -- Cancel
 
@@ -1431,7 +1424,7 @@ end)
 								 else
 									 engineAddVal = math.floor(difference + 1.0)
 								 end
-								 RSCore.Functions.TriggerCallback(
+								 FXCore.Functions.TriggerCallback(
 									 "t1ger_mechanicjob:getMaterialsForHealthRep",
 									 function(hasMaterials)
 										 if hasMaterials then
@@ -1440,7 +1433,7 @@ end)
 											 Citizen.Wait(500)
 											 TaskStartScenarioInPlace(player, "WORLD_HUMAN_VEHICLE_MECHANIC", 0, true)
 											-- exports["progressBars"]:startUI(3500, "REPAIRING: ENGINE")
-											 RSCore.Functions.Progressbar("sell_pawn_items", "REPAIRING: ENGINE", 3500, false, true, {}, {}, {}, {}, function()
+											 FXCore.Functions.Progressbar("sell_pawn_items", "REPAIRING: ENGINE", 3500, false, true, {}, {}, {}, {}, function()
 												 -- Done
 
 											 end, function()
@@ -1562,13 +1555,13 @@ end
 			 Citizen.Wait(1)
 			 distance = (GetDistanceBetweenCoords(coords, vector3(enginePos.x, enginePos.y, enginePos.z), true))
 			 if distance < 5.0 then
-				 RSCore.Functions.DrawText3D(enginePos.x, enginePos.y, enginePos.z, Lang["health_rep_here"])
+				 FXCore.Functions.DrawText3D(enginePos.x, enginePos.y, enginePos.z, Lang["health_rep_here"])
 				 if IsControlJustPressed(0, 38) and distance < 1.0 then
 					 SetEntityHeading(player, GetEntityHeading(vehicle))
 					 Citizen.Wait(500)
 					 TaskStartScenarioInPlace(player, "WORLD_HUMAN_VEHICLE_MECHANIC", 0, true)
 					 --exports["progressBars"]:startUI(3500, (Lang["lift_repairing_veh"]:format(string.upper(label))))
-					 RSCore.Functions.Progressbar("sell_pawn_items", Lang["lift_repairing_veh"]:format(string.upper(label)), 3500, false, true, {}, {}, {}, {}, function()
+					 FXCore.Functions.Progressbar("sell_pawn_items", Lang["lift_repairing_veh"]:format(string.upper(label)), 3500, false, true, {}, {}, {}, {}, function()
 						 -- Done
 
 					 end, function()
@@ -1577,7 +1570,7 @@ end
 					 end)
 					 Citizen.Wait(3500)
 					 ClearPedTasks(player)
-					 RSCore.Functions.TriggerCallback("t1ger_mechanicjob:getMaterialsForHealthRep",function(hasMaterials)
+					 FXCore.Functions.TriggerCallback("t1ger_mechanicjob:getMaterialsForHealthRep",function(hasMaterials)
 							 if hasMaterials then
 								 vehOnLift[plate].health[degName].value = round(newValue, 2)
 								 TriggerServerEvent("t1ger_mechanicjob:updateVehDegradation",
@@ -1651,12 +1644,12 @@ end
 							 ))
 							 if distance < 4.0 then
 								 if not v.done then
-									 RSCore.Functions.DrawText3D(v.pos.x, v.pos.y, v.pos.z, Lang["inspect_here"])
+									 FXCore.Functions.DrawText3D(v.pos.x, v.pos.y, v.pos.z, Lang["inspect_here"])
 									 if IsControlJustPressed(0, 38) and distance < 1.0 then
 										 TaskTurnPedToFaceEntity(player, vehicle, 1.0)
 										 Citizen.Wait(1000)
 										 TaskStartScenarioInPlace(player, v.scenario, 0, true)
-										 RSCore.Functions.Progressbar("sell_pawn_items", Lang["progbar_inspecting_veh"], 1500, false, true, {}, {}, {}, {}, function()
+										 FXCore.Functions.Progressbar("sell_pawn_items", Lang["progbar_inspecting_veh"], 1500, false, true, {}, {}, {}, {}, function()
 											 -- Done
 
 										 end, function()
@@ -1680,7 +1673,7 @@ end
 					 end
 				 end
 				 print(plate)
-				 RSCore.Functions.TriggerCallback(
+				 FXCore.Functions.TriggerCallback(
 					 "t1ger_mechanicjob:getVehDegradation",
 					 function(degradation)
 						print("called vehdegradation")
@@ -1702,7 +1695,7 @@ end
 											 table.insert(array, item.label)
 										 end
 										 local items = table.concat(array, ", ")
-										-- RSCore.Functions.Notify("*" ..h.label .." [" ..items .. "] » " .. round(partValue, 2) .. " / 10.0")
+										-- FXCore.Functions.Notify("*" ..h.label .." [" ..items .. "] » " .. round(partValue, 2) .. " / 10.0")
 										 local chatMsg = "^*" ..h.label .." ^5[^6" ..items .. "^5] ^0» ^3" .. round(partValue, 2) .. "^0 / ^210.0^0" TriggerEvent("chat:addMessage", {args = {chatMsg}})
 									 end
 								 end
@@ -1785,7 +1778,7 @@ end
 						 break
 					 end
 				 end
-				 RSCore.Functions.DrawText3D(door.x, door.y, door.z, "~r~[E]~s~ " .. label)
+				 FXCore.Functions.DrawText3D(door.x, door.y, door.z, "~r~[E]~s~ " .. label)
 				 if IsControlJustPressed(0, 38) and distance < 1.0 then
 					 if isJackRaised then
 						 if type == "interact" then
@@ -1808,7 +1801,7 @@ end
 						 end
 					 else
 						 local item = Config.CarJackItem
-						 RSCore.Functions.TriggerCallback(
+						 FXCore.Functions.TriggerCallback(
 							 "t1ger_mechanicjob:getInventoryItem",
 							 function(hasItem)
 								 if hasItem then
@@ -1880,7 +1873,7 @@ end
 		 label = Lang["progbar_raising_jack"]
 	 end
 	-- exports["progressBars"]:startUI((6500), label)
-	 RSCore.Functions.Progressbar("sell_pawn_items", label, 6500, false, true, {}, {}, {}, {}, function()
+	 FXCore.Functions.Progressbar("sell_pawn_items", label, 6500, false, true, {}, {}, {}, {}, function()
 		 -- Done
 
 	 end, function()
@@ -1963,7 +1956,7 @@ end
 			 local distance = (GetDistanceBetweenCoords(coords, vector3(v.pos.x, v.pos.y, v.pos.z), true))
 			 if distance < 4.0 then
 				 if not v.done then
-					 RSCore.Functions.DrawText3D(v.pos.x, v.pos.y, v.pos.z, Lang["analyze_here"])
+					 FXCore.Functions.DrawText3D(v.pos.x, v.pos.y, v.pos.z, Lang["analyze_here"])
 					 if IsControlJustPressed(0, 38) and distance < 1.0 then
 						 if k == 2 then
 							 SetEntityHeading(player, GetEntityHeading(vehicle))
@@ -1974,7 +1967,7 @@ end
 						 end
 						 TaskStartScenarioInPlace(player, v.scenario, 0, true)
 						-- exports["progressBars"]:startUI(2500, Lang["progbar_analyzing_veh"])
-						 RSCore.Functions.Progressbar("sell_pawn_items", Lang["progbar_analyzing_veh"], 2500, false, true, {}, {}, {}, {}, function()
+						 FXCore.Functions.Progressbar("sell_pawn_items", Lang["progbar_analyzing_veh"], 2500, false, true, {}, {}, {}, {}, function()
 							 -- Done
 
 						 end, function()
@@ -2131,7 +2124,7 @@ end
 							 false
 						 )
 						 if DoesEntityExist(findObj) then
-							 RSCore.Functions.DrawText3D(vehCoords.x, vehCoords.y, vehCoords.z, Lang["install_body_part"])
+							 FXCore.Functions.DrawText3D(vehCoords.x, vehCoords.y, vehCoords.z, Lang["install_body_part"])
 							 if IsControlJustPressed(0, 47) and distance < 1.5 then
 								 installingPart = true
 								 local plate = GetVehicleNumberPlateText(vehicle):gsub("^%s*(.-)%s*$", "%1")
@@ -2304,7 +2297,7 @@ end
 			 while not vehRepaired do
 				 Citizen.Wait(1)
 				 distance = (GetDistanceBetweenCoords(GetEntityCoords(player, 1), vector3(hood.x, hood.y, hood.z), true))
-				 RSCore.Functions.DrawText3D(hood.x, hood.y, hood.z, Lang["repair_here"])
+				 FXCore.Functions.DrawText3D(hood.x, hood.y, hood.z, Lang["repair_here"])
 				 if IsControlJustPressed(0, 38) then
 					 if distance < 1.0 then
 						 SetVehicleDoorOpen(vehicle, 4, 0, 0)
@@ -2357,7 +2350,7 @@ end
 	 local repairDuration =
 		 (((3000 - GetVehicleEngineHealth(vehicle)) - (GetVehicleBodyHealth(vehicle) / 2)) * 2 + val.repairTime)
 	-- exports["progressBars"]:startUI((repairDuration), val.progbar)
-	 RSCore.Functions.Progressbar("sell_pawn_items", repairDuration, val.progbar, false, true, {}, {}, {}, {}, function()
+	 FXCore.Functions.Progressbar("sell_pawn_items", repairDuration, val.progbar, false, true, {}, {}, {}, {}, function()
 		 -- Done
 
 	 end, function()
@@ -2413,11 +2406,11 @@ end
  )
  
  function ApplyVehicledegradation(curVehicle, plate)
-	 RSCore.Functions.TriggerCallback(
+	 FXCore.Functions.TriggerCallback(
 		 "t1ger_mechanicjob:getIfVehicleOwned",
 		 function(vehOwned)
 			 if vehOwned then
-				 RSCore.Functions.TriggerCallback(
+				 FXCore.Functions.TriggerCallback(
 					 "t1ger_mechanicjob:getVehDegradation",
 					 function(degradation)
 						 if degradation ~= nil then
@@ -2802,7 +2795,7 @@ end
 					 math.randomseed(GetGameTimer())
 					 local vehID = math.random(#Config.RepairVehicles)
 					 local jobVehicle = Config.RepairVehicles[vehID]
-					 RSCore.Functions.SpawnVehicle(
+					 FXCore.Functions.SpawnVehicle(
 						 jobVehicle,
 						 function(vehicle)
 							 SetEntityCoordsNoOffset(vehicle, job.pos[1], job.pos[2], job.pos[3])
@@ -2849,10 +2842,10 @@ end
 					 local pedDistance = (GetDistanceBetweenCoords(coords, vector3(pedPos.x, pedPos.y, pedPos.z), false))
  
 					 if vehDistance < 5.0 and not vehicleRepaired then
-						 RSCore.Functions.DrawText3D(enginePos.x, enginePos.y, enginePos.z, Lang["npc_repair_veh"])
+						 FXCore.Functions.DrawText3D(enginePos.x, enginePos.y, enginePos.z, Lang["npc_repair_veh"])
 						 if IsControlJustPressed(0, 38) and vehDistance < 1.0 and not buttonClicked then
 							 buttonClicked = true
-							 RSCore.Functions.TriggerCallback(
+							 FXCore.Functions.TriggerCallback(
 								 "t1ger_mechanicjob:getInventoryItem",
 								 function(hasItem)
 									 if hasItem then
@@ -2877,7 +2870,7 @@ end
 											 )
 										 end
 										-- exports["progressBars"]:startUI((4000), Lang["progbar_npc_fix"])
-										 RSCore.Functions.Progressbar("sell_pawn_items", 4000, Lang["progbar_npc_fix"], false, true, {}, {}, {}, {}, function()
+										 FXCore.Functions.Progressbar("sell_pawn_items", 4000, Lang["progbar_npc_fix"], false, true, {}, {}, {}, {}, function()
 											 -- Done
 
 										 end, function()
@@ -2911,7 +2904,7 @@ end
 					 end
  
 					 if pedDistance < 5.0 and vehicleRepaired then
-						 RSCore.Functions.DrawText3D(pedPos.x, pedPos.y, pedPos.z, Lang["npc_collect_cash"])
+						 FXCore.Functions.DrawText3D(pedPos.x, pedPos.y, pedPos.z, Lang["npc_collect_cash"])
 						 if IsControlJustPressed(0, 38) and pedDistance < 1.5 then
 							 RollDownWindow(JobVeh, 0)
 							 SetVehicleCanBeUsedByFleeingPeds(JobVeh, true)
@@ -2919,7 +2912,7 @@ end
 							 TaskTurnPedToFaceEntity(PlayerPedId(), JobVeh, 1.0)
 							 Citizen.Wait(1000)
 							 TaskPlayAnim(GetPlayerPed(-1), "mp_common", "givetake2_a", 4.0, 4.0, -1, 0, 1, 0, 0, 0)
-							 RSCore.Functions.Progressbar("sell_pawn_items", 4000, Lang["progbar_npc_cash"], false, true, {}, {}, {}, {}, function()
+							 FXCore.Functions.Progressbar("sell_pawn_items", 4000, Lang["progbar_npc_cash"], false, true, {}, {}, {}, {}, function()
 								 -- Done
 
 							 end, function()

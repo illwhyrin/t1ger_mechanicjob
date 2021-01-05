@@ -24,7 +24,7 @@ https://streamable.com/72f96d
 
 To install this resource you need:
 
-if you use a Custom based QBCore like me just change RSCore to .........
+if you use a Custom based QBCore like me just change FXCore to .........
 
 
 MenuV from Tigo https://github.com/ThymonA/menuv

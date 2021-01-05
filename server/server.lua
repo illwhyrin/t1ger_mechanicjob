@@ -1,16 +1,27 @@
+--[[
 
 
-RSCore = nil
-TriggerEvent('RSCore:GetObject', function(obj) RSCore = obj end)
+     ██╗███████╗██████╗ ██╗ ██████╗ ██████╗ ███████╗██╗  ██╗ ██╗ ██╗ ██████╗ ███████╗ ██╗██████╗ 
+     ██║██╔════╝██╔══██╗██║██╔════╝██╔═══██╗██╔════╝╚██╗██╔╝████████╗╚════██╗██╔════╝███║╚════██╗
+     ██║█████╗  ██████╔╝██║██║     ██║   ██║█████╗   ╚███╔╝ ╚██╔═██╔╝ █████╔╝███████╗╚██║ █████╔╝
+██   ██║██╔══╝  ██╔══██╗██║██║     ██║   ██║██╔══╝   ██╔██╗ ████████╗ ╚═══██╗╚════██║ ██║██╔═══╝ 
+╚█████╔╝███████╗██║  ██║██║╚██████╗╚██████╔╝██║     ██╔╝ ██╗╚██╔═██╔╝██████╔╝███████║ ██║███████╗
+ ╚════╝ ╚══════╝╚═╝  ╚═╝╚═╝ ╚═════╝ ╚═════╝ ╚═╝     ╚═╝  ╚═╝ ╚═╝ ╚═╝ ╚═════╝ ╚══════╝ ╚═╝╚══════╝
+                                                                                                 
+
+ ]]
+
+FXCore = nil
+TriggerEvent('FXCore:GetObject', function(obj) FXCore = obj end)
 RegisterServerEvent('t1ger_mechanicjob:fetchMechShops')
 AddEventHandler('t1ger_mechanicjob:fetchMechShops', function()
 
-    local xPlayers = RSCore.Functions.GetPlayers()
+    local xPlayers = FXCore.Functions.GetPlayers()
     local players  = {}
 
     local DataFected = false
 	for i = 1, #xPlayers, 1 do
-        local xPlayer = RSCore.Functions.GetPlayer(xPlayers[i])
+        local xPlayer = FXCore.Functions.GetPlayer(xPlayers[i])
 		table.insert(players, { source = xPlayer.PlayerData.source, identifier = xPlayer.PlayerData.steam, shopID = 0 })
     end
     exports['ghmattimysql']:execute("SELECT * FROM t1ger_mechanic", {}, function(results)
@@ -43,7 +54,7 @@ end)
 
 RegisterServerEvent('t1ger_mechanicjob:fireEmployee')
 AddEventHandler('t1ger_mechanicjob:fireEmployee', function(id, plyIdentifier)
-    local xPlayer = RSCore.Functions.GetPlayer(source)
+    local xPlayer = FXCore.Functions.GetPlayer(source)
     exports['ghmattimysql']:execute("SELECT * FROM t1ger_mechanic WHERE shopID = @shopID", {['@shopID'] = id}, function(data)
         if data[1].employees ~= nil then
             local employees = json.decode(data[1].employees)
@@ -55,7 +66,7 @@ AddEventHandler('t1ger_mechanicjob:fireEmployee', function(id, plyIdentifier)
                             ['@employees'] = json.encode(employees),
                             ['@shopID'] = id
                         })
-                        local xTarget = RSCore.Functions.GetPlayer(plyIdentifier)
+                        local xTarget = FXCore.Functions.GetPlayer(plyIdentifier)
                         xTarget.Functions.SetJob("unemployed", 1)
                         TriggerClientEvent('t1ger_mechanicjob:ShowNotifyESX', xTarget.PlayerData.source, Lang['mech_employee_fired'])
                         break
@@ -66,8 +77,8 @@ AddEventHandler('t1ger_mechanicjob:fireEmployee', function(id, plyIdentifier)
     end)
 end)
 
-RSCore.Functions.CreateCallback('t1ger_mechanicjob:getIfVehicleOwned', function (source, cb, plate)
-    local xPlayer = RSCore.Functions.GetPlayer(source)
+FXCore.Functions.CreateCallback('t1ger_mechanicjob:getIfVehicleOwned', function (source, cb, plate)
+    local xPlayer = FXCore.Functions.GetPlayer(source)
     local found = nil
     local vehicleData = nil
 
@@ -92,8 +103,8 @@ if result ~= nil then
     end
     end)
 end)
-RSCore.Functions.CreateCallback('t1ger_mechanicjob:getVehDegradation',function(source, cb, plate)
-    local xPlayer = RSCore.Functions.GetPlayer(source)
+FXCore.Functions.CreateCallback('t1ger_mechanicjob:getVehDegradation',function(source, cb, plate)
+    local xPlayer = FXCore.Functions.GetPlayer(source)
     exports['ghmattimysql']:execute("SELECT health FROM player_vehicles WHERE plate=@plate",{['@plate'] = plate}, function(data)
         if data[1]  ~= nil then
             local health = json.decode(data[1].health)
@@ -102,9 +113,9 @@ RSCore.Functions.CreateCallback('t1ger_mechanicjob:getVehDegradation',function(s
         end
     end)
 end)
-RSCore.Functions.CreateCallback('t1ger_mechanicjob:buyMechShop',function(source, cb, id, val, name)
+FXCore.Functions.CreateCallback('t1ger_mechanicjob:buyMechShop',function(source, cb, id, val, name)
   
-    local xPlayer = RSCore.Functions.GetPlayer(source)
+    local xPlayer = FXCore.Functions.GetPlayer(source)
 
     local els = xPlayer.PlayerData.steam
     local money = 0
@@ -120,7 +131,7 @@ RSCore.Functions.CreateCallback('t1ger_mechanicjob:buyMechShop',function(source,
 			xPlayer.Functions.RemoveMoney('bank', val.price)
         end
         
-        RSCore.Functions.ExecuteSql(true,"INSERT INTO t1ger_mechanic (identifier, shopID, name) VALUES ('"..els.."', '"..id.."', '"..name.."')")
+        FXCore.Functions.ExecuteSql(true,"INSERT INTO t1ger_mechanic (identifier, shopID, name) VALUES ('"..els.."', '"..id.."', '"..name.."')")
         cb(true)
     else
         cb(false)
@@ -128,8 +139,8 @@ RSCore.Functions.CreateCallback('t1ger_mechanicjob:buyMechShop',function(source,
 end)
 
 
-RSCore.Functions.CreateCallback('t1ger_mechanicjob:sellMechShop',function(source, cb, id, val, sellPrice)
-    local xPlayer = RSCore.Functions.GetPlayer(source)
+FXCore.Functions.CreateCallback('t1ger_mechanicjob:sellMechShop',function(source, cb, id, val, sellPrice)
+    local xPlayer = FXCore.Functions.GetPlayer(source)
     exports['ghmattimysql']:execute("SELECT shopID FROM t1ger_mechanic WHERE identifier = @identifier", {['@identifier'] = xPlayer.PlayerData.steam}, function(data)
 
         if data[1]~= nil then
@@ -152,8 +163,8 @@ RSCore.Functions.CreateCallback('t1ger_mechanicjob:sellMechShop',function(source
 end)
 
 -- Reanme Mech Shop:
-RSCore.Functions.CreateCallback('t1ger_mechanicjob:renameMechShop',function(source, cb, id, val, name)
-    local xPlayer = RSCore.Functions.GetPlayer(source)
+FXCore.Functions.CreateCallback('t1ger_mechanicjob:renameMechShop',function(source, cb, id, val, name)
+    local xPlayer = FXCore.Functions.GetPlayer(source)
     exports['ghmattimysql']:execute("SELECT shopID FROM t1ger_mechanic WHERE identifier = @identifier", {['@identifier'] = xPlayer.PlayerData.steam}, function(data)
         if data[1].shopID ~= nil then 
             if data[1].shopID == id then
@@ -170,8 +181,8 @@ RSCore.Functions.CreateCallback('t1ger_mechanicjob:renameMechShop',function(sour
 end)
 
 -- Get Employees:
-RSCore.Functions.CreateCallback('t1ger_mechanicjob:getEmployees',function(source, cb, id)
-    local xPlayer = RSCore.Functions.GetPlayer(source)
+FXCore.Functions.CreateCallback('t1ger_mechanicjob:getEmployees',function(source, cb, id)
+    local xPlayer = FXCore.Functions.GetPlayer(source)
     local dataFected = false
     local shopEmployees = {}
     local noEmployees = false
@@ -183,10 +194,10 @@ RSCore.Functions.CreateCallback('t1ger_mechanicjob:getEmployees',function(source
                    
                     exports['ghmattimysql']:execute('SELECT * FROM players WHERE steam = @identifier', {['@identifier'] = v.identifier}, function (info)
                         for j,l in pairs(info) do 
-                            local player = RSCore.Functions.GetSource(l.steam)
-                            local jugador = RSCore.Functions.GetPlayer(player)
-                            local player1 = RSCore.Functions.GetSource(v.identifier)
-                            local jugador1 = RSCore.Functions.GetPlayer(player1)
+                            local player = FXCore.Functions.GetSource(l.steam)
+                            local jugador = FXCore.Functions.GetPlayer(player)
+                            local player1 = FXCore.Functions.GetSource(v.identifier)
+                            local jugador1 = FXCore.Functions.GetPlayer(player1)
                             if v.identifier == l.steam then 
                                 table.insert(shopEmployees,{identifier = v.identifier, firstname = jugador.PlayerData.charinfo.firstname, lastname = jugador.PlayerData.charinfo.lastname, jobGrade = jugador1.PlayerData.job.grade})
                                 if k == #employees then 
@@ -218,7 +229,7 @@ end)
 RegisterServerEvent('t1ger_mechanicjob:updateEmployeJobGrade')
 AddEventHandler('t1ger_mechanicjob:updateEmployeJobGrade', function(id, plyIdentifier, newJobGrade)
     
-    local xPlayer = RSCore.Functions.GetPlayer(source)
+    local xPlayer = FXCore.Functions.GetPlayer(source)
 
 
     exports['ghmattimysql']:execute("SELECT employees FROM t1ger_mechanic WHERE shopID = @shopID", {['@shopID'] = id}, function(data)
@@ -227,8 +238,8 @@ AddEventHandler('t1ger_mechanicjob:updateEmployeJobGrade', function(id, plyIdent
             if #employees > 0 then 
                 for k,v in pairs(employees) do 
                     if plyIdentifier == v.identifier then
-                        local xTarget = RSCore.Functions.GetPlayer(plyIdentifier)
-                        local grade = RSCore.Shared.Jobs["mechanic"].grades
+                        local xTarget = FXCore.Functions.GetPlayer(plyIdentifier)
+                        local grade = FXCore.Shared.Jobs["mechanic"].grades
                         
                         for j,c in ipairs(grade) do
                       
@@ -258,10 +269,10 @@ AddEventHandler('t1ger_mechanicjob:updateEmployeJobGrade', function(id, plyIdent
 end)
 
 -- Callback to Get online players:
-RSCore.Functions.CreateCallback('t1ger_mechanicjob:getOnlinePlayers', function(source, cb)
+FXCore.Functions.CreateCallback('t1ger_mechanicjob:getOnlinePlayers', function(source, cb)
 	local fetchedPlayers = GetOnlinePlayers()
 	cb(fetchedPlayers)
-    local xPlayer = RSCore.Functions.GetPlayer(source)
+    local xPlayer = FXCore.Functions.GetPlayer(source)
 
     
 end)
@@ -271,7 +282,7 @@ RegisterServerEvent('t1ger_mechanicjob:reqruitEmployee')
 AddEventHandler('t1ger_mechanicjob:reqruitEmployee', function(id, plyIdentifier, name)
 
 
-    local xPlayer = RSCore.Functions.GetPlayer(source)
+    local xPlayer = FXCore.Functions.GetPlayer(source)
     local loopDone = false
     local identifierMatch = false
     local noEmployees = false
@@ -314,7 +325,7 @@ AddEventHandler('t1ger_mechanicjob:reqruitEmployee', function(id, plyIdentifier,
                         ['@shopID'] = id
                     })
                     TriggerClientEvent('t1ger_mechanicjob:ShowNotifyESX', xPlayer.PlayerData.source, (Lang['you_recruited_x']:format(name)))
-                    local xTarget = RSCore.Functions.GetPlayerentifier(plyIdentifier)
+                    local xTarget = FXCore.Functions.GetPlayerentifier(plyIdentifier)
                     xTarget.Functions.SetJob("mechanic")
                     TriggerClientEvent('t1ger_mechanicjob:ShowNotifyESX', xTarget.PlayerData.source, Lang['you_have_been_recruited'])
                     break
@@ -331,7 +342,7 @@ AddEventHandler('t1ger_mechanicjob:reqruitEmployee', function(id, plyIdentifier,
                             ['@shopID'] = id
                         })
                         TriggerClientEvent('t1ger_mechanicjob:ShowNotifyESX', xPlayer.PlayerData.source, (Lang['you_recruited_x']:format(name)))
-                        local xTarget = RSCore.Functions.GetPlayerentifier(plyIdentifier)
+                        local xTarget = FXCore.Functions.GetPlayerentifier(plyIdentifier)
                         xTarget.setJob("mechanic", 0)
                         TriggerClientEvent('t1ger_mechanicjob:ShowNotifyESX', xTarget.PlayerData.source, Lang['you_have_been_recruited'])
                         break
@@ -345,7 +356,7 @@ end)
 -- Withdraw Account Money:
 RegisterServerEvent('t1ger_mechanicjob:withdrawMoney')
 AddEventHandler('t1ger_mechanicjob:withdrawMoney', function(id, amount)
-    local xPlayer = RSCore.Functions.GetPlayer(source)
+    local xPlayer = FXCore.Functions.GetPlayer(source)
     local accountMoney = 0
     exports['ghmattimysql']:execute("SELECT money FROM t1ger_mechanic WHERE shopID = @shopID", {['@shopID'] = id}, function(data)
         if data[1].money ~= nil then 
@@ -367,7 +378,7 @@ end)
 -- Deposit Account Money:
 RegisterServerEvent('t1ger_mechanicjob:depositMoney')
 AddEventHandler('t1ger_mechanicjob:depositMoney', function(id, amount)
-    local xPlayer = RSCore.Functions.GetPlayer(source)
+    local xPlayer = FXCore.Functions.GetPlayer(source)
     local accountMoney = 0
     exports['ghmattimysql']:execute("SELECT money FROM t1ger_mechanic WHERE shopID = @shopID", {['@shopID'] = id}, function(data)
         if data[1].money ~= nil then 
@@ -388,8 +399,8 @@ AddEventHandler('t1ger_mechanicjob:depositMoney', function(id, amount)
 end)
 
 -- Check Storage Access:
-RSCore.Functions.CreateCallback('t1ger_mechanicjob:checkAccess',function(source, cb, id)
-    local xPlayer = RSCore.Functions.GetPlayer(source)
+FXCore.Functions.CreateCallback('t1ger_mechanicjob:checkAccess',function(source, cb, id)
+    local xPlayer = FXCore.Functions.GetPlayer(source)
     exports['ghmattimysql']:execute("SELECT * FROM t1ger_mechanic WHERE shopID = @shopID", {['@shopID'] = id}, function(data)
         for shops,columns in pairs(data) do 
             if columns.shopID == id then 
@@ -416,8 +427,8 @@ RSCore.Functions.CreateCallback('t1ger_mechanicjob:checkAccess',function(source,
 end)
 
 -- Get User Inventory:
-RSCore.Functions.CreateCallback('t1ger_mechanicjob:getUserInventory', function(source, cb)
-    local xPlayer = RSCore.Functions.GetPlayer(source)
+FXCore.Functions.CreateCallback('t1ger_mechanicjob:getUserInventory', function(source, cb)
+    local xPlayer = FXCore.Functions.GetPlayer(source)
     local inventoryItems = xPlayer.PlayerData.items
     cb(inventoryItems)
 end)
@@ -427,7 +438,7 @@ end)
 RegisterServerEvent('t1ger_mechanicjob:depositItem')
 AddEventHandler('t1ger_mechanicjob:depositItem', function(item, amount, id)
 
-    local xPlayer = RSCore.Functions.GetPlayer(source)
+    local xPlayer = FXCore.Functions.GetPlayer(source)
     local addItem = item
     local itemAdded = false
     if xPlayer.Functions.GetItemByName(addItem).amount >= amount then
@@ -488,8 +499,8 @@ AddEventHandler('t1ger_mechanicjob:depositItem', function(item, amount, id)
 end)
 
 -- Get Storage Inventory:
-RSCore.Functions.CreateCallback('t1ger_mechanicjob:getStorageInventory', function(source, cb, id)
-	local xPlayer = RSCore.Functions.GetPlayer(source)
+FXCore.Functions.CreateCallback('t1ger_mechanicjob:getStorageInventory', function(source, cb, id)
+	local xPlayer = FXCore.Functions.GetPlayer(source)
     local dataFected = false
     local storageInv = {}
     exports['ghmattimysql']:execute("SELECT storage FROM t1ger_mechanic WHERE shopID = @shopID", {['@shopID'] = id}, function(data)
@@ -515,8 +526,8 @@ RSCore.Functions.CreateCallback('t1ger_mechanicjob:getStorageInventory', functio
     end
 end)
 
-RSCore.Functions.CreateCallback('t1ger_mechanicjob:getTakenShops', function(source, cb)
-    local xPlayer =  RSCore.Functions.GetPlayer(source).PlayerData.steam
+FXCore.Functions.CreateCallback('t1ger_mechanicjob:getTakenShops', function(source, cb)
+    local xPlayer =  FXCore.Functions.GetPlayer(source).PlayerData.steam
  
     exports['ghmattimysql']:execute("SELECT shopID, name FROM t1ger_mechanic WHERE identifier = @identifier", {['@identifier'] = xPlayer}, function(data)
         
@@ -526,8 +537,8 @@ RSCore.Functions.CreateCallback('t1ger_mechanicjob:getTakenShops', function(sour
 end)
 
 
-RSCore.Functions.CreateCallback('t1ger_mechanicjob:getShopAccounts', function(source, cb)
-    local xPlayer = RSCore.Functions.GetPlayer(source)
+FXCore.Functions.CreateCallback('t1ger_mechanicjob:getShopAccounts', function(source, cb)
+    local xPlayer = FXCore.Functions.GetPlayer(source)
     exports['ghmattimysql']:execute("SELECT money FROM t1ger_mechanic WHERE identifier = @citizenid", {['@citizenid'] = xPlayer.PlayerData.steam}, function(data)
         if data[1].money ~= nil then
             local account = json.decode(data[1].money)
@@ -540,7 +551,7 @@ end)
 
 RegisterServerEvent('t1ger_mechanicjob:JobReward')
 AddEventHandler('t1ger_mechanicjob:JobReward', function()
-    local xPlayer = RSCore.Functions.GetPlayer(source)
+    local xPlayer = FXCore.Functions.GetPlayer(source)
     xPlayer.Functions.AddMoney("cash", Config.Payout)
 end)
 
@@ -548,7 +559,7 @@ end)
 -- Withdraw Items from Storage:
 RegisterServerEvent('t1ger_mechanicjob:withdrawItem')
 AddEventHandler('t1ger_mechanicjob:withdrawItem', function(item, amount, id)
-    local xPlayer = RSCore.Functions.GetPlayer(source)
+    local xPlayer = FXCore.Functions.GetPlayer(source)
     local removeItem = item
     exports['ghmattimysql']:execute("SELECT storage FROM t1ger_mechanic WHERE shopID = @shopID", {['@shopID'] = id}, function(data)
 
@@ -569,7 +580,7 @@ AddEventHandler('t1ger_mechanicjob:withdrawItem', function(item, amount, id)
                     xPlayer.Functions.AddItem(removeItem, amount)
                    
                     local itemLabel = ''
-                    if Config.ItemLabelESX  then itemLabel = RSCore.Functions.GetItemByName(removeItem) else itemLabel = tostring(removeItem) end
+                    if Config.ItemLabelESX  then itemLabel = FXCore.Functions.GetItemByName(removeItem) else itemLabel = tostring(removeItem) end
                     TriggerClientEvent('t1ger_mechanicjob:ShowNotifyESX', xPlayer.PlayerData.source, (Lang['storage_withdrew_x']:format(amount, itemLabel)))
                 end
             end
@@ -582,46 +593,57 @@ end)
 -- Craft Items:
 RegisterServerEvent('t1ger_mechanicjob:craftItem')
 AddEventHandler('t1ger_mechanicjob:craftItem', function(item_label, item_name, item_recipe, id, val)
-    local xPlayer = RSCore.Functions.GetPlayer(source)
-    local removeItems = {}
-    local loopDone = false
+    local xPlayer        = FXCore.Functions.GetPlayer(source)
+    local removeItems    = {}
+    local loopDone       = false
     local hasRecipeItems = false
-    for k,v in ipairs(item_recipe) do
-		local material = Config.Materials[v.id]
-        if xPlayer.Functions.GetItemByName(tostring(material.item)).amount >= v.qty then
-            table.insert(removeItems, {item = material.item, amount = v.qty})
+    for k, v in ipairs(item_recipe) do
+        local material = Config.Materials[v.id]
+        print(material.item)
+        local items = material.item
+        local cuan  = xPlayer.Functions.GetItemByName(items)
+        if cuan ~= nil then
+            if cuan.amount >= v.qty then
+                table.insert(removeItems, { item = items, amount = v.qty })
+            else
+                loopDone       = true
+                hasRecipeItems = false
+                break
+            end
         else
-            loopDone = true
+          --  TriggerClientEvent("FXCore:Notify", source, "you dont have the items")
+            loopDone       = true
             hasRecipeItems = false
             break
         end
-        if k == #item_recipe then 
-            loopDone = true
-            hasRecipeItems = true
-        end
     end
-    while not loopDone do 
-        Citizen.Wait(1)
+    if k == #item_recipe then
+        loopDone       = true
+        hasRecipeItems = true
     end
-    if hasRecipeItems then 
-        for k,v in pairs(removeItems) do
-            xPlayer.Functions.RemoveItem(v.item, v.amount)
-        end
-        xPlayer.Functions.AddItem(item_name, 1)
-    else
-        TriggerClientEvent('t1ger_mechanicjob:ShowNotifyESX', xPlayer.PlayerData.source, Lang['not_enough_materials'])
+
+while not loopDone do
+    Citizen.Wait(1)
+end
+if hasRecipeItems then
+    for k, v in pairs(removeItems) do
+        xPlayer.Functions.RemoveItem(v.item, v.amount)
     end
+    xPlayer.Functions.AddItem(item_name, 1)
+else
+    TriggerClientEvent('t1ger_mechanicjob:ShowNotifyESX', xPlayer.PlayerData.source, Lang['not_enough_materials'])
+end
 end)
 
 -- Billing:
 RegisterServerEvent('t1ger_mechanicjob:sendBill')
 AddEventHandler('t1ger_mechanicjob:sendBill',function(target, amount)
-	local xPlayer = RSCore.Functions.GetPlayer(source)
-    local xPlayers = RSCore.Functions.GetPlayers()
+	local xPlayer = FXCore.Functions.GetPlayer(source)
+    local xPlayers = FXCore.Functions.GetPlayers()
     if amount ~= nil then
         if amount >= 0 then
             for i = 1, #xPlayers, 1 do
-                local tPlayer = RSCore.Functions.GetPlayer(xPlayers[i])
+                local tPlayer = FXCore.Functions.GetPlayer(xPlayers[i])
                 if tPlayer.source == target then
                     tPlayer.Functions.RemoveMoney('bank', tonumber(amount))
                     TriggerClientEvent('t1ger_mechanicjob:ShowNotifyESX', tPlayer.PlayerData.source, "You paid the invoice of ~g~$"..amount.."~s~ to the mechanic.")
@@ -637,8 +659,8 @@ end)
 -- Repair Kits:
 Citizen.CreateThread(function()
 	for k,v in pairs(Config.RepairKits) do 
-		RSCore.Functions.CreateUseableItem(v.item, function(source)
-			local xPlayer = RSCore.Functions.GetPlayer(source)
+		FXCore.Functions.CreateUseableItem(v.item, function(source)
+			local xPlayer = FXCore.Functions.GetPlayer(source)
 			TriggerClientEvent('t1ger_mechanicjob:useRepairKit', xPlayer.PlayerData.source, k, v)
 		end)
 	end
@@ -647,30 +669,30 @@ end)
 -- Remove item event:
 RegisterServerEvent('t1ger_mechanicjob:removeItem')
 AddEventHandler('t1ger_mechanicjob:removeItem', function(item, amount)
-    local xPlayer = RSCore.Functions.GetPlayer(source)
+    local xPlayer = FXCore.Functions.GetPlayer(source)
     xPlayer.Functions.RemoveItem(item, amount)
 end)
 -- Get inventory item:
-RSCore.Functions.CreateCallback('t1ger_mechanicjob:getInventoryItem',function(source, cb, item)
-    local xPlayer = RSCore.Functions.GetPlayer(source)
+FXCore.Functions.CreateCallback('t1ger_mechanicjob:getInventoryItem',function(source, cb, item)
+    local xPlayer = FXCore.Functions.GetPlayer(source)
     local hasItem = xPlayer.Functions.GetItemByName(item)
     if hasItem then cb(true) else cb(false) end
 end)
 
 Citizen.CreateThread(function()
 	for k,v in pairs(Config.BodyParts) do 
-		RSCore.Functions.CreateUseableItem(v.item, function(source)
-			local xPlayer = RSCore.Functions.GetPlayer(source)
+		FXCore.Functions.CreateUseableItem(v.item, function(source)
+			local xPlayer = FXCore.Functions.GetPlayer(source)
 			TriggerClientEvent('t1ger_mechanicjob:installBodyPartCL', xPlayer.PlayerData.source, k, v)
 		end)
 	end
 end)
 
 function GetOnlinePlayers()
-    local xPlayers = RSCore.Functions.GetPlayers()
+    local xPlayers = FXCore.Functions.GetPlayers()
 	local players  = {}
 	for i=1, #xPlayers, 1 do
-		local xPlayer = RSCore.Functions.GetPlayer(xPlayers[i])
+		local xPlayer = FXCore.Functions.GetPlayer(xPlayers[i])
 		table.insert(players, {
 			source     = xPlayer.PlayerData.source,
 			citizenid = xPlayer.PlayerData.steam,
@@ -687,8 +709,8 @@ end
 
 
 -- Get Materials for Health Part Repair:
-RSCore.Functions.CreateCallback('t1ger_mechanicjob:getMaterialsForHealthRep',function(source, cb, plate, degName, materials, newValue, addValue, vehOnLift)
-    local xPlayer = RSCore.Functions.GetPlayer(source)
+FXCore.Functions.CreateCallback('t1ger_mechanicjob:getMaterialsForHealthRep',function(source, cb, plate, degName, materials, newValue, addValue, vehOnLift)
+    local xPlayer = FXCore.Functions.GetPlayer(source)
     -- Get & Remove materials:
     local removeItems = {}
     local loopDone = false
@@ -728,7 +750,7 @@ end)
 -- Update Vehicle Degradation:
 RegisterServerEvent('t1ger_mechanicjob:updateVehDegradation') 
 AddEventHandler('t1ger_mechanicjob:updateVehDegradation', function(plate, label, degName, vehOnLift)
-    local xPlayer = RSCore.Functions.GetPlayer(source)
+    local xPlayer = FXCore.Functions.GetPlayer(source)
     exports['ghmattimysql']:execute("SELECT health FROM player_vehicles WHERE plate=@plate",{['@plate'] = plate}, function(data) 
         if #data > 0 then
             if data[1].health ~= nil then 
@@ -759,7 +781,7 @@ end)
 -- Degrade Vehicle Degradation:
 RegisterServerEvent('t1ger_mechanicjob:degradeVehHealth') 
 AddEventHandler('t1ger_mechanicjob:degradeVehHealth', function(plate, damageArray)
-    local xPlayer = RSCore.Functions.GetPlayer(source)
+    local xPlayer = FXCore.Functions.GetPlayer(source)
     exports['ghmattimysql']:execute("SELECT health FROM player_vehicles WHERE plate=@plate",{['@plate'] = plate}, function(data) 
         if #data > 0 then
             if data[1].health ~= nil then 
@@ -824,7 +846,7 @@ end)
 
 RegisterServerEvent('t1ger_mechanicjob:JobReward')
 AddEventHandler('t1ger_mechanicjob:JobReward',function(payout)
-    local xPlayer = RSCore.Functions.GetPlayer(source)
+    local xPlayer = FXCore.Functions.GetPlayer(source)
     local cash = math.random(Config.Payout)
     xPlayer.Functions.AddMoney("cash",cash)
     TriggerClientEvent('t1ger_mechanicjob:ShowNotifyESX', xPlayer.PlayerData.source, (Lang['npc_job_cash_reward']:format(cash)))
@@ -833,7 +855,7 @@ end)
 
 
 
-RSCore.Commands.Add("mechmenu", "Mechanic Menu", {}, false, function(source, args)
+FXCore.Commands.Add("mechmenu", "Mechanic Menu", {}, false, function(source, args)
 	TriggerClientEvent('t1ger_mechanicjob:menu',source)
 end)
 
