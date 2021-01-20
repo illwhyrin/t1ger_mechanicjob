@@ -119,14 +119,14 @@ Config.Materials = {
 
 -- Available Health Parts to repair and required materials and amounts:
 Config.HealthParts = {
-	[1] = { label = "Brakes", degName = "brakes", materials =       { [1] = { id = 1, qty = 3 }, [2] = { id = 2, qty = 2 } } },
-	[2] = { label = "Radiator", degName = "radiator", materials =   { [1] = { id = 1, qty = 3 }, [2] = { id = 2, qty = 2 } } },
-	[3] = { label = "Clutch", degName = "clutch", materials =               { [1] = { id = 1, qty = 3 }, [2] = { id = 2, qty = 2 } } },
-	[4] = { label = "Transmission", degName = "transmission", materials =   { [1] = { id = 1, qty = 3 }, [2] = { id = 2, qty = 2 } } },
-	[5] = { label = "Electronics", degName = "electronics", materials = { [1] = { id = 1, qty = 3 }, [2] = { id = 2, qty = 2 } } },
-	[6] = { label = "Drive Shaft", degName = "driveshaft", materials = { [1] = { id = 1, qty = 3 }, [2] = { id = 2, qty = 2 } } },
-	[7] = { label = "Fuel Injector", degName = "fuelinjector", materials = { [1] = { id = 1, qty = 3 }, [2] = { id = 2, qty = 2 } } },
-	[8] = { label = "Engine", degName = "engine", materials = { [1] = { id = 1, qty = 3 }, [2] = { id = 2, qty = 2 } } },
+	[1] = { label = "Brakes", degName = "brakes", materials =                   { [1] = { id = 1, qty = 3 }, [2] = { id = 2, qty = 2 } } },
+	[2] = { label = "Radiator", degName = "radiator", materials =               { [1] = { id = 1, qty = 3 }, [2] = { id = 2, qty = 2 } } },
+	[3] = { label = "Clutch", degName = "clutch", materials =                   { [1] = { id = 1, qty = 3 }, [2] = { id = 2, qty = 2 } } },
+	[4] = { label = "Transmission", degName = "transmission", materials =       { [1] = { id = 1, qty = 3 }, [2] = { id = 2, qty = 2 } } },
+	[5] = { label = "Electronics", degName = "electronics", materials =         { [1] = { id = 1, qty = 3 }, [2] = { id = 2, qty = 2 } } },
+	[6] = { label = "Drive Shaft", degName = "driveshaft", materials =          { [1] = { id = 1, qty = 3 }, [2] = { id = 2, qty = 2 } } },
+	[7] = { label = "Fuel Injector", degName = "fuelinjector", materials =      { [1] = { id = 1, qty = 3 }, [2] = { id = 2, qty = 2 } } },
+	--[8] = { label = "Engine", degName = "engine", materials =                   { [1] = { id = 1, qty = 3 }, [2] = { id = 2, qty = 2 } } },
 }
 
 -- NPC Jobs Position:

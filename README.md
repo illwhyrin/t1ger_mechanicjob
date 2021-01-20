@@ -57,3 +57,7 @@ Know Issues:
 - I dont know if is a MenuV error or mine but if you craft, deposit money, or store items you need to close the menu and re-open to see the change (cannot be exploited because is the menu who doest update the value.)
 
 REMEMMBER THIS IS A WORK IN PROGRESS SO EXPECT SOME BUGS
+
+All the credits go to T1ger, if you are the owner please contact me and i will delete it.
+
+(Kids from certain framework that claim this is his work, prove it!)
