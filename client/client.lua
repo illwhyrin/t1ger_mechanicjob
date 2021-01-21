@@ -22,7 +22,7 @@
  Citizen.CreateThread(
 	 function()
 		 while FXCore == nil do
-			 TriggerEvent("FXCore:GetObject",function(obj)FXCore = obj
+			 TriggerEvent(Config.Core,function(obj)FXCore = obj
 				 end)
 			 Citizen.Wait(400)
 		 end
@@ -1504,9 +1504,7 @@ function RepairVehicleHealthPart()
 		if vehOnLift[plate] ~= nil then
 		if GetEntityModel(GetHashKey(vehicle)) == GetEntityModel(GetHashKey(vehOnLift[plate].entity)) then
 			if vehOnLift[plate].health ~= nil then
-				local health = vehOnLift[plate].health
-				tprint(health)
-				print("HEALTH")
+	
 				for k, v in ipairs(elements) do
 					local mechmenubutton = Repair:AddButton({ icon = "🧑‍🔧 	", label = v.label, value = v, description = v.label, select  = function(btn)
 						local selected = btn.Value

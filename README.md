@@ -26,6 +26,7 @@ To install this resource you need:
 
 if you use a Custom based QBCore like me just change FXCore to .........
 
+Modify Config.Core  = " " to match your version
 
 MenuV from Tigo https://github.com/ThymonA/menuv
 

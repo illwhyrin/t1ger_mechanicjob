@@ -141,7 +141,7 @@ Config.Payout = math.random(250, 400)
 
 -- Vehicle scrambler for npc jobs:
 Config.RepairVehicles = {"sultan", "blista", "glendale", "exemplar"}
-
+Config.Core = "FXCore:GetObject"
 -- Prop Emotes:
 Config.PropEmotes = {
 	["prop_roadcone02a"] = {label = "Road Cone", model = "prop_roadcone02a", bone = 28422, pos = {0.6,-0.15,-0.1}, rot = {315.0,288.0,0.0}},
