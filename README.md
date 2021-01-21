@@ -51,12 +51,15 @@ No copyright, but appreciate if you give me credit for the work, it take me a lo
 Know Issues:
 
 - Sometimes a restart resource is required to "recognize owner"
+---------------
+* ##Credits to the notification fix Omen#1072!!! 
+* ##https://discord.gg/N3tWXBRyu6
 
 ------------
 
 - I dont know if is a MenuV error or mine but if you craft, deposit money, or store items you need to close the menu and re-open to see the change (cannot be exploited because is the menu who doest update the value.)
 
-REMEMMBER THIS IS A WORK IN PROGRESS SO EXPECT SOME BUGS
+REMEMBER THIS IS A WORK IN PROGRESS SO EXPECT SOME BUGS
 
 All the credits go to T1ger, if you are the owner please contact me and i will delete it.
 
