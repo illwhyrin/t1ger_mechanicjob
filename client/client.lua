@@ -69,9 +69,9 @@ end)
 local bossMenu, storageMenu, workbenchMenu = nil, nil, nil
 local distance                             = 0
 Citizen.CreateThread(function()
+	local player = PlayerPedId()
 	while true do
-
-		local pos = GetEntityCoords(PlayerPedId(), true)
+		local pos = GetEntityCoords(player, true)
 
 		for k, v in pairs(Config.MechanicShops) do
 			distance = GetDistanceBetweenCoords(coords.x, coords.y, coords.z, v.menuPos[1], v.menuPos[2], v.menuPos[3], true)
@@ -988,38 +988,38 @@ local elements = {}
 				 for num, shop in pairs(Config.MechanicShops) do
 					 local shopDist = GetDistanceBetweenCoords(coords.x,coords.y,coords.z,shop.menuPos[1],shop.menuPos[2],shop.menuPos[3],true)
 					 if shopDist < 20.0 then
-						local shops = shop.lifts
+						 local shops = shop.lifts
 						 for k, v in pairs(shops) do
-							-- local mk = v.marker
+							 -- local mk = v.marker
 							 -- Attach Vehicle to Lift:
 							 local liftDist = GetDistanceBetweenCoords(coords.x,coords.y,coords.z,v.entry[1],v.entry[2],v.entry[3],true)
 							 if liftDist < 6 and IsPedInAnyVehicle(player, 1) then
 								 if  liftDist > 2.0 then
 									 DrawMarker(
-										v.marker.type,
-										 v.entry[1],
-										 v.entry[2],
-										 v.entry[3],
-										 0.0,
-										 0.0,
-										 0.0,
-										 0.0,
-										 0.0,
-										 0.0,
-										 v.marker.scale.x,
-										 v.marker.scale.y,
-										 v.marker.scale.z,
-										 v.marker.color.r,
-										 v.marker.color.g,
-										 v.marker.color.b,
-										 v.marker.color.a,
-										 false,
-										 true,
-										 2,
-										 false,
-										 false,
-										 false,
-										 false
+											 v.marker.type,
+											 v.entry[1],
+											 v.entry[2],
+											 v.entry[3],
+											 0.0,
+											 0.0,
+											 0.0,
+											 0.0,
+											 0.0,
+											 0.0,
+											 v.marker.scale.x,
+											 v.marker.scale.y,
+											 v.marker.scale.z,
+											 v.marker.color.r,
+											 v.marker.color.g,
+											 v.marker.color.b,
+											 v.marker.color.a,
+											 false,
+											 true,
+											 2,
+											 false,
+											 false,
+											 false,
+											 false
 									 )
 								 end
 								 if liftDist < 2.0 then
@@ -1031,26 +1031,17 @@ local elements = {}
 											 v.inUse = true
 											 TaskLeaveVehicle(player, v.currentVeh, 0)
 											 Citizen.Wait(2000)
-											 SetEntityCoordsNoOffset(
-												 v.currentVeh,
-												 v.pos[1],
-												 v.pos[2],
-												 v.pos[3],
-												 true,
-												 false,
-												 false,
-												 true
-											 )
+											 SetEntityCoordsNoOffset(v.currentVeh,v.pos[1], v.pos[2],v.pos[3], true,false, false,true)
 											 SetEntityHeading(v.currentVeh, v.pos[4])
 											 SetVehicleOnGroundProperly(v.currentVeh)
 											 FreezeEntityPosition(v.currentVeh, true)
 											 local newVehPos = GetEntityCoords(v.currentVeh)
-											
+
 											 v.pos[3] = newVehPos.z
 											 print(newVehPos.z)
 											 vehOnLift[plate] = {entity = v.currentVeh,pos = v.pos,plate = plate,health = {}}
 											 TriggerServerEvent( "t1ger_mechanicjob:liftStateSV", num,k,v,v.currentVeh,true)
-										 break
+											 break
 										 end
 									 else
 										 FXCore.Functions.DrawText3D(v.entry[1], v.entry[2], v.entry[3], Lang["lift_occupied"])
@@ -1059,40 +1050,40 @@ local elements = {}
 							 end
 							 -- Detach Vehicle or Move Up/Down:
 							 local controlDist =
-								 GetDistanceBetweenCoords(
-								 coords.x,
-								 coords.y,
-								 coords.z,
-								 v.control[1],
-								 v.control[2],
-								 v.control[3],
-								 false
+							 GetDistanceBetweenCoords(
+									 coords.x,
+									 coords.y,
+									 coords.z,
+									 v.control[1],
+									 v.control[2],
+									 v.control[3],
+									 false
 							 )
 							 if controlDist < 6 and not IsPedInAnyVehicle(player, 1) then
 								 if controlDist > 1.5 then
 									 DrawMarker(v.marker.type,v.control[1],
-										 v.control[2],
-										 v.control[3],
-										 0.0,
-										 0.0,
-										 0.0,
-										 0.0,
-										 0.0,
-										 0.0,
-										 v.marker.scale.x,
-										 v.marker.scale.y,
-										 v.marker.scale.z,
-										 v.marker.color.r,
-										 v.marker.color.g,
-										 v.marker.color.b,
-										 v.marker.color.a,
-										 false,
-										 true,
-										 2,
-										 false,
-										 false,
-										 false,
-										 false
+									            v.control[2],
+									            v.control[3],
+									            0.0,
+									            0.0,
+									            0.0,
+									            0.0,
+									            0.0,
+									            0.0,
+									            v.marker.scale.x,
+									            v.marker.scale.y,
+									            v.marker.scale.z,
+									            v.marker.color.r,
+									            v.marker.color.g,
+									            v.marker.color.b,
+									            v.marker.color.a,
+									            false,
+									            true,
+									            2,
+									            false,
+									            false,
+									            false,
+									            false
 									 )
 								 end
 								 if controlDist < 1.5 then
@@ -1136,6 +1127,9 @@ local elements = {}
 						 end
 					 end
 				 end
+			 else
+
+				 Wait(2500)
 			 end
 		 end
 	 end
@@ -1477,7 +1471,20 @@ end)
 		 ShowNotifyESX(Lang["no_vehicle_nearby"])
 	 end
  end
-
+function tprint (tbl, indent)
+	if not indent then indent = 0 end
+	for k, v in pairs(tbl) do
+		formatting = string.rep("  ", indent) .. k .. ": "
+		if type(v) == "table" then
+			print(formatting)
+			tprint(v, indent+1)
+		elseif type(v) == 'boolean' then
+			print(formatting .. tostring(v))
+		else
+			print(formatting .. v)
+		end
+	end
+end
 function RepairVehicleHealthPart()
 	--#######################################################################
 	local vehicle  = GetClosestVehicle(coords.x, coords.y, coords.z, 5.0, 0, 71)
@@ -1497,6 +1504,9 @@ function RepairVehicleHealthPart()
 		if vehOnLift[plate] ~= nil then
 		if GetEntityModel(GetHashKey(vehicle)) == GetEntityModel(GetHashKey(vehOnLift[plate].entity)) then
 			if vehOnLift[plate].health ~= nil then
+				local health = vehOnLift[plate].health
+				tprint(health)
+				print("HEALTH")
 				for k, v in ipairs(elements) do
 					local mechmenubutton = Repair:AddButton({ icon = "🧑‍🔧 	", label = v.label, value = v, description = v.label, select  = function(btn)
 						local selected = btn.Value
@@ -2619,8 +2629,8 @@ end
  end
  
  -- Vehicle Collision / Damage --
- Citizen.CreateThread(
-	 function()
+ Citizen.CreateThread( function()
+	 local Player = PlayerPedId()
 		 Citizen.Wait(1000)
 		 local lastVehSpeed = 0.0
 		 local lastVehBodyhealth = 0.0
@@ -2631,7 +2641,7 @@ end
 		 while true do
 			 Citizen.Wait(1)
 			 if curVehicle ~= nil and curVehicle ~= 0 then
-				 if driver == PlayerPedId() then
+				 if driver == Player then
 					 local curVehicleEngine = GetVehicleEngineHealth(curVehicle)
 					 if curVehicleEngine < 0.0 then
 						 SetVehicleEngineHealth(curVehicle, 0.0)
@@ -2641,7 +2651,7 @@ end
 						 Citizen.Wait(100)
 						 local newVehBodyHealth = GetVehicleBodyHealth(curVehicle)
 						 local newVehSpeed = (GetEntitySpeed(curVehicle) * multiplier)
- 
+
 						 if curVehicleEngine > 0.0 and (lastVehBodyhealth - newVehBodyHealth) > 10 then
 							 if newVehSpeed < (lastVehSpeed * 0.5) and lastVehSpeed > 180.0 then
 								 applyCrashDamage(curVehicle)
@@ -2666,6 +2676,8 @@ end
 						 end
 					 end
 				 end
+			 else
+				 Wait(2500)
 			 end
 		 end
 	 end
@@ -3102,8 +3114,6 @@ end
 	dynamic = dynamic ~= nil and true or false
 	
 	CreateThread(function()
-		
-		
 		-- The below has to be done just for CreateObject since for some reason CreateObjects model argument is set
 		-- as an Object instead of a hash so it doesn't automatically hash the item
 		model = type(model) == 'number' and model or GetHashKey(model)

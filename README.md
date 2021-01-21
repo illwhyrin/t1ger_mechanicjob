@@ -47,10 +47,10 @@ this will add a Heath table to the player_vehicles
 	
 
 
-No copyright, but aprecciate if you give me credit for the work, it take me a lot of time to make it work.
+No copyright, but appreciate if you give me credit for the work, it take me a lot of time to make it work.
 Know Issues:
 
-- Sometimes a restart resource is requeried to "recognize owner"
+- Sometimes a restart resource is required to "recognize owner"
 
 ------------
 

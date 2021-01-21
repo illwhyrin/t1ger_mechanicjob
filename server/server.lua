@@ -798,7 +798,7 @@ AddEventHandler('t1ger_mechanicjob:degradeVehHealth', function(plate, damageArra
                                     ['@health'] = json.encode(health),
                                     ['@plate'] = plate
                                 })
-                                TriggerClientEvent('t1ger_mechanicjob:ShowNotifyESX', xPlayer.PlayerData.source, part.label.." took damage. Degradation by: "..round(degVal/10,2)..". New Value: "..round(v.value/10,2))
+                                TriggerClientEvent('t1ger_mechanicjob:ShowNotifyESX', xPlayer.PlayerData.source, part.label.." took damage. Degradation by: "..math.floor(degVal+0.5)..". New Value: "..math.floor(v.value+0.5))
                             end
                         end
                     end
