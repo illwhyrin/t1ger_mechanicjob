@@ -109,7 +109,7 @@ end)
 		 FXCore.Functions.TriggerCallback("t1ger_mechanicjob:getTakenShops",function(ownedShops)
 			 for k, v in pairs(ownedShops) do
 					 if v.shopID ~= plyShopID then
-						print(v.shopID)
+
 						 emptyShops[v.shopID] = v.shopID
 					 end
 				 end
@@ -449,7 +449,7 @@ end
  end
  -- Employe List Menu
  function OpenEmployeeListMenu(id, val)
-	 print(id)
+
 
 	 local elements = {}
 	 local assert = assert
@@ -465,7 +465,7 @@ end
 		 for k, v in ipairs(employees) do
 				button3 = Manage:AddButton({ icon = "🧑‍🔧	", label = v.firstname.." "..v.lastname.." | "..v.jobGrade, value = v, select = function(btn)
 					local data = btn.Value
-					--print("Data current "..tostring(data.firstname).." | "..id.." | "..tostring(val))
+
 					OpenEmployeeData(data,data,id,val)
 				--	
 				end })
@@ -500,7 +500,7 @@ end
 		MenuV:OpenMenu(Firemenu)
 		
 		confirm:On("confirm",function()
-			print("From Confirm"..user.identifier)
+
 			TriggerServerEvent('t1ger_mechanicjob:fireEmployee',id,user.identifier)
 			Firemenu:Close()
 			EmployeesMainMenu(id,val)
@@ -518,7 +518,7 @@ end
 	gradebutton:On("select",function()
 	local newJobGrade = LocalInputInt("jobgrade",2,1)
 	--if newJobGrade == "number" then
-		print("id"..id.." Iden "..user.identifier.." New Grade "..newJobGrade)
+
 		TriggerServerEvent('t1ger_mechanicjob:updateEmployeJobGrade',id,user.identifier,newJobGrade)
 		Grade:Close()
 	--end
@@ -577,7 +577,7 @@ end
 	
 	 local BuyMenu = MenuV:CreateMenu('Buy Shop', 'Wanna Buy it?')
 	 MenuV:OpenMenu(BuyMenu, function()
-		--print('Menu Open')
+
 	end)
 	local buybutton = BuyMenu:AddButton({icon ="🧑‍🔧 	",label = Lang["button_yes"] , value = "confirm_purchase",description = 'Yes'  })
 
@@ -586,7 +586,7 @@ end
 
 		local shopName = LocalInput("buy", 20, "Shop Name")
 		FXCore.Functions.TriggerCallback("t1ger_mechanicjob:buyMechShop",function(purchased)
-		--	print("792")
+
 			 if purchased then
 				 ShowNotifyESX((Lang["mech_shop_bought"]):format(math.floor(val.price)))
 				 TriggerServerEvent("t1ger_mechanicjob:fetchMechShops")
@@ -691,119 +691,6 @@ function MechShopStorageMenu(id, val)
 		slots = 10,
 	})
 	TriggerEvent("inventory:client:SetCurrentStash", "Mechanic "..id)
-
-	--local keyPressed = false
-	-- invItems = {}
-	--local elements   = {
-	--	{ label = Lang["storage_deposit"], value = "storage_deposit" },
-	--	--{ label = Lang['storage_withdraw'], value = "storage_withdraw" },
-	--}
-	--local assert     = assert
-	--local menu       = assert(MenuV)
-	--local Inventory  = MenuV:CreateMenu("Storage", "", 'size-150')
-	--local Inventory1 = MenuV:CreateMenu("Inventory", "", 'size-150')
-	--local Inventory2 = MenuV:CreateMenu(Lang['storage_withdraw'], "", 'size-150')
-	--MenuV:OpenMenu(Inventory, function()
-	--end)
-	--for k, v in ipairs(elements) do
-	--
-	--	local mechmenubutton = Inventory:AddButton({ icon = "🧑‍🔧 	", label = v.label, value = v, description = v.label, select = function(btn)
-	--		local value = btn.Value.value
-	--		if value == "storage_deposit" then
-	--
-	--
-	--
-	--		end
-	--	end })
-	--	FXCore.Functions.TriggerCallback('t1ger_mechanicjob:getUserInventory', function(inventory)
-	--		MenuV:Refresh()
-	--		for k, v in pairs(inventory) do
-	--			if v.amount > 0 then
-	--				table.insert(invItems, { label = v.amount .. "x " .. v.label, value = v.name })
-	--			end
-	--		end
-	--		for k, v in pairs(invItems) do
-	--
-	--			local buybutton = Inventory1:AddButton({ icon = "🧑‍🔧 	", label = v.label, value = v, description = v.label, select = function(btn)
-	--
-	--
-	--				local data = btn.Value.value
-	--				local count = LocalInputInt("wachin", 10, 1)
-	--				if count == nil then
-	--					ShowNotifyESX(Lang['invalid_amount'])
-	--					MenuV:Refresh()
-	--				else
-	--					if count > 0 then
-	--
-	--						if not keyPressed then
-	--							keyPressed = true
-	--							TriggerServerEvent('t1ger_mechanicjob:depositItem', data, tonumber(count), id)
-	--							Inventory1:Close()
-	--							MenuV:Refresh()
-	--						end
-	--
-	--						Inventory1:Close()
-	--						MenuV:Refresh()
-	--					else
-	--						ShowNotifyESX(Lang['invalid_amount'])
-	--						Inventory1:Close()
-	--						MenuV:Refresh()
-	--					end
-	--				end
-	--			end})
-	--		end
-	--		MenuV:Refresh()
-	--	end)
-	--
-	--
-	--
-	--
-	--	FXCore.Functions.TriggerCallback('t1ger_mechanicjob:getStorageInventory', function(inventory)
-	--		if inventory ~= nil then
-	--			local invItems1 = {}
-	--			for k,v in pairs(inventory) do
-	--				table.insert(invItems1, {label = v.count.."x "..v.label, value = v.item, amount = v.count})
-	--			end
-	--			for k, v in pairs(invItems1) do
-	--
-	--				local buybutton = Inventory2:AddButton({ icon = "🧑‍🔧 	", label = v.label, value = v, description = v.label, select  = function(btn)
-	--
-	--					local data = btn.Value
-	--					print(data.value)
-	--					local count = LocalInputInt("storage",3,1)
-	--
-	--					if count == nil then
-	--						ShowNotifyESX(Lang['invalid_amount'])
-	--					else
-	--						if count > 0 then
-	--							if count <= data.amount then
-	--								if not keyPressed then
-	--									keyPressed = true
-	--									TriggerServerEvent('t1ger_mechanicjob:withdrawItem', data.value, count, id)
-	--								end
-	--							else
-	--								ShowNotifyESX(Lang['too_high_count'])
-	--							end
-	--							Wait(500)
-	--							MechShopStorageMenu(id, val)
-	--						else
-	--							ShowNotifyESX(Lang['invalid_amount'])
-	--						end
-	--					end
-	--					MenuV:Refresh()
-	--					Inventory2:Close()
-	--				end})
-	--				MenuV:Refresh()
-	--			end
-	--			Inventory1:Close()
-	--
-	--
-	--		else
-	--			ShowNotifyESX(Lang['storage_inv_empty'])
-	--		end
-	--	end, id)
-	--
-	--end
 
 end
  -- ## STORAGE MENU END ## --
@@ -911,9 +798,9 @@ local elements = {}
 			for h,j in ipairs(craftOptions) do
 				local firebutton = CraftMenu:AddButton({icon ="🧑‍🔧 ",label = j.label, value = j,description = 'Craft' ,select = function(btn1) 
 					local select1 = btn1.Value
-					print(select1)
+
 				if select1.value == "craft_item" then
-						print("true")
+
 					if not keyPressed then 
 						keyPressed = true
 						FXCore.Functions.Progressbar("sell_pawn_items", (Lang['crafting_item']:format(string.upper(select.label))), (Config.CraftTime * 1000), false, true, {}, {}, {}, {}, function() -- Done
@@ -1038,7 +925,7 @@ local elements = {}
 											 local newVehPos = GetEntityCoords(v.currentVeh)
 
 											 v.pos[3] = newVehPos.z
-											 print(newVehPos.z)
+
 											 vehOnLift[plate] = {entity = v.currentVeh,pos = v.pos,plate = plate,health = {}}
 											 TriggerServerEvent( "t1ger_mechanicjob:liftStateSV", num,k,v,v.currentVeh,true)
 											 break
@@ -1241,7 +1128,7 @@ end)
 	 for k,v in ipairs(elements) do
 		local buybutton = CarrOBJ:AddButton({icon ="🧑‍🔧 ",label = v.label, value = v,description = 'Select item' ,select = function(btn) 
 			local select = btn.Value
-			print(select.pos[1])
+
 			if select == "remove_obj" then
 			
 				local coords = GetEntityCoords(GetPlayerPed(-1))
@@ -1508,7 +1395,7 @@ function RepairVehicleHealthPart()
 				for k, v in ipairs(elements) do
 					local mechmenubutton = Repair:AddButton({ icon = "🧑‍🔧 	", label = v.label, value = v, description = v.label, select  = function(btn)
 						local selected = btn.Value
-						print(selected.materials)
+
 						local newValue = LocalInputInt("input",20,1)
 						if vehOnLift[plate].health[selected.degName] ~= nil then
 							if newValue > 10.0 then
@@ -1552,7 +1439,7 @@ function RepairVehicleHealthPart()
 end
  
  function RepairSelectedHealthPart(plate, label, degName, materials, newValue, addValue)
-	 print(materials)
+
 	 local vehicle = GetClosestVehicle(coords.x, coords.y, coords.z, 5.0, 0, 71)
 	 local repairingPart = false
 
@@ -1682,11 +1569,11 @@ end
 						 end
 					 end
 				 end
-				 print(plate)
+
 				 FXCore.Functions.TriggerCallback(
 					 "t1ger_mechanicjob:getVehDegradation",
 					 function(degradation)
-						print("called vehdegradation")
+
 						 local vehHealth = {}
 						 if degradation ~= nil then
 							 -- insert values into health array:

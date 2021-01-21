@@ -587,7 +587,7 @@ AddEventHandler('t1ger_mechanicjob:craftItem', function(item_label, item_name, i
     local hasRecipeItems = false
     for k, v in ipairs(item_recipe) do
         local material = Config.Materials[v.id]
-        print(material.item)
+
         local items = material.item
         local cuan  = xPlayer.Functions.GetItemByName(items)
         if cuan ~= nil then
