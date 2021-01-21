@@ -7,9 +7,15 @@ if you think that my time deserve a coffe
 buymeacoff.ee/jericofx
 
 ------------
+###Why the obfuscation? 
+
+ * Some 6 year old babys are claming this code and selling this for a really high price, so i obfuscate most part of the code and print stuff in the console just to tell the other people that this resource is free.
+
+
+------------------------------------------------------------------
 
 Take from the original resource and modified to work with Qbus based servers, almost everything is working like:
-
+and if you don´t like it, don´t use it.
 - Menu with command so you can Bind it.
 - Buy, Rename, Shell shop
 - Lift
